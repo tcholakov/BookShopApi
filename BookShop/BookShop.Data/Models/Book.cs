@@ -16,7 +16,6 @@
         public string Title { get; set; }
 
         [Required]
-        [MaxLength()]
         public string Description { get; set; }
 
         public int? AgeRestriction { get; set; }
