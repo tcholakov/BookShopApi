@@ -1,6 +1,9 @@
 ﻿namespace BookShop.Api
 {
+    using AutoMapper;
     using BookShop.Data;
+    using BookShop.Services.Author;
+    using BookShop.Services.Author.Contracts;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
@@ -23,6 +26,10 @@
                 .AddDbContext<BookShopDbContext>(options => options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            
+            services.AddTransient<IAuthorService, AuthorService>();
+
+            services.AddAutoMapper();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
