@@ -1,6 +1,7 @@
 ﻿namespace BookShop.Api.Controllers
 {
     using AutoMapper;
+    using BookShop.Api.Infrastructure.Filters;
     using BookShop.Api.Models.Author;
     using BookShop.Services.Author.Contracts;
     using Microsoft.AspNetCore.Mvc;
@@ -36,13 +37,9 @@
         }
 
         [HttpPost]
+        [ValidateModelState]
         public async Task<IActionResult> Post(AuthorRequestModel author)
         {
-            if (!this.ModelState.IsValid)
-            {
-                return this.BadRequest(this.ModelState);
-            }
-
             int id = await this.authorService.Create(author.FirstName, author.LastName);
 
             return this.Ok(id);
