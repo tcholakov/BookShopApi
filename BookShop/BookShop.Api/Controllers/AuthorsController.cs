@@ -1,11 +1,11 @@
 ﻿namespace BookShop.Api.Controllers
 {
+    using System.Threading.Tasks;
     using AutoMapper;
     using BookShop.Api.Infrastructure.Filters;
     using BookShop.Api.Models.Author;
     using BookShop.Services.Author.Contracts;
     using Microsoft.AspNetCore.Mvc;
-    using System.Threading.Tasks;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -13,7 +13,6 @@
     {
         private readonly IAuthorService authorService;
         private readonly IMapper mapper;
-
 
         public AuthorsController(IAuthorService authorService, IMapper mapper)
         {
@@ -26,7 +25,7 @@
         {
             var authorServiceModel = await this.authorService.Details(id);
 
-            if(authorServiceModel == null)
+            if (authorServiceModel == null)
             {
                 return this.NotFound();
             }
