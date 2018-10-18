@@ -4,15 +4,15 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-    using static DataConstants;
+    using static BookShop.Common.Constants.BookConstants;
 
     public class Book
     {
         public int Id { get; set; }
 
         [Required]
-        [MinLength(BookTitleMinLength)]
-        [MaxLength(BookTitleMaxLength)]
+        [MinLength(TitleMinLength)]
+        [MaxLength(TitleMaxLength)]
         public string Title { get; set; }
 
         [Required]

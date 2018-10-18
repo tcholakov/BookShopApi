@@ -4,6 +4,7 @@
     using BookShop.Api.Models.Author;
     using BookShop.Services.Author.Contracts;
     using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
 
     [Route("api/[controller]")]
     [ApiController]
@@ -20,9 +21,9 @@
         }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            var authorServiceModel = this.authorService.Details(id);
+            var authorServiceModel = await this.authorService.Details(id);
 
             if(authorServiceModel == null)
             {
@@ -32,6 +33,19 @@
             var authorModel = this.mapper.Map<AuthorDetailsModel>(authorServiceModel);
 
             return this.Ok(authorModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post(AuthorRequestModel author)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.BadRequest(this.ModelState);
+            }
+
+            int id = await this.authorService.Create(author.FirstName, author.LastName);
+
+            return this.Ok(id);
         }
     }
 }

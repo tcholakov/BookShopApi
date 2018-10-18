@@ -1,9 +1,12 @@
 ﻿namespace BookShop.Services.Author.Contracts
 {
     using BookShop.Services.Models.Author;
+    using System.Threading.Tasks;
 
     public interface IAuthorService
     {
-        AuthorDetailsServiceModel Details(int id);
+        Task<int> Create(string firstName, string lastName);
+
+        Task<AuthorDetailsServiceModel> Details(int id);
     }
 }
