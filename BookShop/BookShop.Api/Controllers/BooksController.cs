@@ -45,7 +45,7 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery]string search)
+        public async Task<IActionResult> Get([FromQuery]string search = "")
         {
             var booksServiceModel = await this.bookService.Filter(search);
 
