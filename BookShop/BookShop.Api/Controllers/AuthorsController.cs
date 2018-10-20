@@ -1,7 +1,7 @@
 ﻿namespace BookShop.Api.Controllers
 {
-    using System.Threading.Tasks;
     using System.Linq;
+    using System.Threading.Tasks;
     using AutoMapper;
     using BookShop.Api.Infrastructure.Filters;
     using BookShop.Api.Models.Author;
@@ -43,7 +43,7 @@
             var authorsBooksServiceModel = await this.authorService
                 .BooksByAuthor(id);
 
-            var authorsBooksResponseModel = authorsBooksServiceModel.Select(book => this.mapper.Map<BookByAuthorModel>(book));
+            var authorsBooksResponseModel = authorsBooksServiceModel.Select(book => this.mapper.Map<BookWithCategoriesModel>(book));
 
             return this.Ok(authorsBooksResponseModel);
         }

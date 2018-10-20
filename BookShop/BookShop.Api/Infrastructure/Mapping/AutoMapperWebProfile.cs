@@ -16,12 +16,18 @@
 
         private void AuthorMappings()
         {
-            this.CreateMap<AuthorDetailsServiceModel, AuthorDetailsModel>();
+            this.CreateMap<AuthorShortServiceModel, AuthorShortModel>()
+                .ForMember(authorApiModel => authorApiModel.Name, cfg => cfg.MapFrom(authorServiceModel => authorServiceModel.FirstName + " " + authorServiceModel.LastName));
+
+            this.CreateMap<AuthorDetailsServiceModel, AuthorDetailsModel>()
+                .ForMember(authorApiModel => authorApiModel.Name, cfg => cfg.MapFrom(authorServiceModel => authorServiceModel.FirstName + " " + authorServiceModel.LastName));
         }
 
         private void BookMappings()
         {
-            this.CreateMap<BookServiceModel, BookByAuthorModel>();
+            this.CreateMap<BookServiceModel, BookWithCategoriesModel>();
+
+            this.CreateMap<BookServiceModel, BookDetailedModel>();
         }
     }
 }

@@ -4,6 +4,8 @@
     using BookShop.Data;
     using BookShop.Services.Author;
     using BookShop.Services.Author.Contracts;
+    using BookShop.Services.Book;
+    using BookShop.Services.Book.Contracts;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
@@ -28,6 +30,8 @@
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             
             services.AddTransient<IAuthorService, AuthorService>();
+
+            services.AddTransient<IBookService, BookService>();
 
             services.AddAutoMapper();
         }
