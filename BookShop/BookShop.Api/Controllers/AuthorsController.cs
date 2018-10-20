@@ -1,9 +1,11 @@
 ﻿namespace BookShop.Api.Controllers
 {
     using System.Threading.Tasks;
+    using System.Linq;
     using AutoMapper;
     using BookShop.Api.Infrastructure.Filters;
     using BookShop.Api.Models.Author;
+    using BookShop.Api.Models.Book;
     using BookShop.Services.Author.Contracts;
     using Microsoft.AspNetCore.Mvc;
 
@@ -38,9 +40,12 @@
         [HttpGet("{id}/books")]
         public async Task<IActionResult> GetBooks(int id)
         {
-            var authorsBooks = await this.authorService.BooksByAuthor(id);
+            var authorsBooksServiceModel = await this.authorService
+                .BooksByAuthor(id);
 
-            return this.Ok(authorsBooks);
+            var authorsBooksResponseModel = authorsBooksServiceModel.Select(book => this.mapper.Map<BookByAuthorModel>(book));
+
+            return this.Ok(authorsBooksResponseModel);
         }
 
         [HttpPost]
