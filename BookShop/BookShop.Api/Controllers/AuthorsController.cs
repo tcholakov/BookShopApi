@@ -34,6 +34,14 @@
 
             return this.Ok(authorModel);
         }
+        
+        [HttpGet("{id}/books")]
+        public async Task<IActionResult> GetBooks(int id)
+        {
+            var authorsBooks = await this.authorService.BooksByAuthor(id);
+
+            return this.Ok(authorsBooks);
+        }
 
         [HttpPost]
         [ValidateModelState]
