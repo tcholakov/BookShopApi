@@ -12,5 +12,7 @@
         Task<AuthorDetailsServiceModel> Details(int id);
 
         Task<IEnumerable<BookServiceModel>> BooksByAuthor(int authorId);
+
+        Task<bool> Exists(int authorId);
     }
 }

@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
     using AutoMapper;
     using BookShop.Data;
+    using BookShop.Data.Models;
     using BookShop.Services.Book.Contracts;
     using BookShop.Services.Models.Book;
     using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,29 @@
             this.mapper = mapper;
         }
 
+        public async Task<int> Create(BookInputServiceModel book)
+        {
+            var bookDataModel = this.mapper.Map<Book>(book);
+
+            if (book.CategoryIds != null)
+            {
+                foreach (var categoryId in book.CategoryIds)
+                {
+                    var bookCategory = new BookCategory
+                    {
+                        CategoryId = categoryId
+                    };
+
+                    bookDataModel.Categories.Add(bookCategory);
+                }
+            }
+
+            this.bookShopDbContext.Add(bookDataModel);
+            await this.bookShopDbContext.SaveChangesAsync();
+
+            return bookDataModel.Id;
+        }
+
         public async Task<IEnumerable<BookServiceModel>> Filter(string searchText)
         {
             var books = await this.bookShopDbContext
@@ -30,12 +54,7 @@
                 .Where(book => book.Title.Contains(searchText) || book.Description.Contains(searchText))
                 .OrderBy(book => book.Title)
                 .ToAsyncEnumerable()
-                .Select(bookDataModel =>
-                {
-                    var bookServiceModel = this.mapper.Map<BookServiceModel>(bookDataModel);
-                    bookServiceModel.Categories = bookDataModel.Categories.Select(categoryBook => categoryBook.Category.Name);
-                    return bookServiceModel;
-                })
+                .Select(bookDataModel => this.mapper.Map<BookServiceModel>(bookDataModel))
                 .ToList();
 
             return books;
@@ -50,12 +69,7 @@
                 .ThenInclude(bookCategory => bookCategory.Category)
                 .Where(book => book.Id == id)
                 .ToAsyncEnumerable()
-                .Select(bookDataModel =>
-                {
-                    var bookServiceModel = this.mapper.Map<BookServiceModel>(bookDataModel);
-                    bookServiceModel.Categories = bookDataModel.Categories.Select(categoryBook => categoryBook.Category.Name);
-                    return bookServiceModel;
-                })
+                .Select(bookDataModel => this.mapper.Map<BookServiceModel>(bookDataModel))
                 .FirstOrDefault();
 
             return bookModel;

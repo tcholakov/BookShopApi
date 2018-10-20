@@ -28,6 +28,8 @@
             this.CreateMap<BookServiceModel, BookWithCategoriesModel>();
 
             this.CreateMap<BookServiceModel, BookDetailedModel>();
+
+            this.CreateMap<BookRequestModel, BookInputServiceModel>();
         }
     }
 }

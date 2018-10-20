@@ -37,6 +37,11 @@
                 .HasForeignKey(bookCategory => bookCategory.CategoryId);
 
             modelBuilder
+                .Entity<Category>()
+                .HasIndex(category => category.Name)
+                .IsUnique();
+
+            modelBuilder
                 .Entity<Book>()
                 .HasOne(book => book.Author)
                 .WithMany(author => author.Books)

@@ -56,15 +56,17 @@
                 .ThenInclude(bookCategory => bookCategory.Category)
                 .Where(book => book.AuthorId == authorId)
                 .ToAsyncEnumerable()
-                .Select(bookDataModel =>
-                {
-                    var bookServiceModel = this.mapper.Map<BookServiceModel>(bookDataModel);
-                    bookServiceModel.Categories = bookDataModel.Categories.Select(categoryBook => categoryBook.Category.Name);
-                    return bookServiceModel;
-                })
+                .Select(bookDataModel => this.mapper.Map<BookServiceModel>(bookDataModel))
                 .ToList();
 
             return booksTask;
+        }
+
+        public async Task<bool> Exists(int authorId)
+        {
+            bool exists = await this.bookShopDbContext.Authors.AnyAsync(author => author.Id == authorId);
+
+            return exists;
         }
     }
 }

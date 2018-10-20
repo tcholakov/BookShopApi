@@ -6,6 +6,8 @@
     using BookShop.Services.Author.Contracts;
     using BookShop.Services.Book;
     using BookShop.Services.Book.Contracts;
+    using BookShop.Services.Category;
+    using BookShop.Services.Category.Contracts;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Mvc;
@@ -32,6 +34,8 @@
             services.AddTransient<IAuthorService, AuthorService>();
 
             services.AddTransient<IBookService, BookService>();
+
+            services.AddTransient<ICategoryService, CategoryService>();
 
             services.AddAutoMapper();
         }

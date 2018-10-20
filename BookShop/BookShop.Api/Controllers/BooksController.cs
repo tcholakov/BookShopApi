@@ -1,10 +1,15 @@
 ﻿namespace BookShop.Api.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
+    using BookShop.Api.Infrastructure.Filters;
     using BookShop.Api.Models.Book;
+    using BookShop.Services.Author.Contracts;
     using BookShop.Services.Book.Contracts;
+    using BookShop.Services.Category.Contracts;
+    using BookShop.Services.Models.Book;
     using Microsoft.AspNetCore.Mvc;
 
     [Route("api/[controller]")]
@@ -12,11 +17,15 @@
     public class BooksController : Controller
     {
         private readonly IBookService bookService;
+        private readonly IAuthorService authorService;
+        private readonly ICategoryService categoryService;
         private readonly IMapper mapper;
 
-        public BooksController(IBookService bookService, IMapper mapper)
+        public BooksController(IBookService bookService, IAuthorService authorService, ICategoryService categoryService, IMapper mapper)
         {
             this.bookService = bookService;
+            this.authorService = authorService;
+            this.categoryService = categoryService;
             this.mapper = mapper;
         }
 
@@ -43,6 +52,44 @@
             var booksApiModel = booksServiceModel.Select(bookServiceModel => this.mapper.Map<BookDetailedModel>(bookServiceModel));
 
             return this.Ok(booksApiModel);
+        }
+
+        [HttpPost]
+        [ValidateModelState]
+        public async Task<IActionResult> Post(BookRequestModel book)
+        {
+            bool authorExists = await this.authorService.Exists(book.AuthorId);
+
+            if (!authorExists)
+            {
+                return this.BadRequest();
+            }
+
+            var bookInputModel = this.mapper.Map<BookInputServiceModel>(book);
+            
+            if (book.Categories != null)
+            {
+                var categoryIds = new List<int>();
+                foreach (var categoryName in book.Categories)
+                {
+                    var category = await this.categoryService.GetByName(categoryName);
+
+                    if (category == null)
+                    {
+                        categoryIds.Add(await this.categoryService.Create(categoryName));
+                    }
+                    else
+                    {
+                        categoryIds.Add(category.Id);
+                    }
+                }
+
+                bookInputModel.CategoryIds = categoryIds;
+            }
+
+            int bookId = await this.bookService.Create(bookInputModel);
+
+            return this.Ok(bookId);
         }
     }
 }

@@ -6,6 +6,8 @@
 
     public interface IBookService
     {
+        Task<int> Create(BookInputServiceModel book);
+
         Task<IEnumerable<BookServiceModel>> Filter(string searchText);
 
         Task<BookServiceModel> Details(int id);

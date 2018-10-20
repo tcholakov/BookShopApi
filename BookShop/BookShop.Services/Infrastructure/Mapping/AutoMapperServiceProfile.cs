@@ -11,6 +11,7 @@
         public AutoMapperServiceProfile()
         {
             this.AuthorMappings();
+            this.BookMappings();
         }
 
         private void AuthorMappings()
@@ -23,7 +24,10 @@
 
         private void BookMappings()
         {
-            this.CreateMap<Book, BookServiceModel>();
+            this.CreateMap<Book, BookServiceModel>()
+                .ForMember(bookServiceModel => bookServiceModel.Categories, cfg => cfg.MapFrom(bookDataModel => bookDataModel.Categories.Select(bookCategory => bookCategory.Category.Name)));
+
+            this.CreateMap<BookInputServiceModel, Book>();
         }
     }
 }
