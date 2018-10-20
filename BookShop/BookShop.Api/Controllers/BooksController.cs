@@ -62,7 +62,7 @@
 
             if (!authorExists)
             {
-                return this.BadRequest();
+                return this.BadRequest("Author does not exist");
             }
 
             var bookInputModel = this.mapper.Map<BookInputServiceModel>(book);
