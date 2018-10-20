@@ -1,8 +1,8 @@
 ﻿namespace BookShop.Services.Models.Book
 {
-    using BookShop.Services.Models.Author;
     using System;
     using System.Collections.Generic;
+    using BookShop.Services.Models.Author;
 
     public class BookServiceModel
     {
