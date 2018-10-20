@@ -1,6 +1,6 @@
 ﻿namespace BookShop.Services.Book
 {
-    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
@@ -18,6 +18,27 @@
         {
             this.bookShopDbContext = bookShopDbContext;
             this.mapper = mapper;
+        }
+
+        public async Task<IEnumerable<BookServiceModel>> Filter(string searchText)
+        {
+            var books = await this.bookShopDbContext
+                .Books
+                .Include(book => book.Author)
+                .Include(book => book.Categories)
+                .ThenInclude(bookCategory => bookCategory.Category)
+                .Where(book => book.Title.Contains(searchText) || book.Description.Contains(searchText))
+                .OrderBy(book => book.Title)
+                .ToAsyncEnumerable()
+                .Select(bookDataModel =>
+                {
+                    var bookServiceModel = this.mapper.Map<BookServiceModel>(bookDataModel);
+                    bookServiceModel.Categories = bookDataModel.Categories.Select(categoryBook => categoryBook.Category.Name);
+                    return bookServiceModel;
+                })
+                .ToList();
+
+            return books;
         }
 
         public async Task<BookServiceModel> Details(int id)

@@ -1,5 +1,6 @@
 ﻿namespace BookShop.Api.Controllers
 {
+    using System.Linq;
     using System.Threading.Tasks;
     using AutoMapper;
     using BookShop.Api.Models.Book;
@@ -32,6 +33,16 @@
             var bookApiModel = this.mapper.Map<BookDetailedModel>(bookServiceModel);
 
             return this.Ok(bookApiModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery]string search)
+        {
+            var booksServiceModel = await this.bookService.Filter(search);
+
+            var booksApiModel = booksServiceModel.Select(bookServiceModel => this.mapper.Map<BookDetailedModel>(bookServiceModel));
+
+            return this.Ok(booksApiModel);
         }
     }
 }
