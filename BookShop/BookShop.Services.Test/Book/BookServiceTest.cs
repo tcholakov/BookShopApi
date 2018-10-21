@@ -86,9 +86,23 @@
             // Assert
             result
                 .Should()
-                .HaveCount(2)
-                .And
-                .Match(r => r.ElementAt(0).Id == 1 && r.ElementAt(1).Id == 3);
+                .HaveCount(2);
+
+            var firstResultBook = result.ElementAt(0);
+            var secondResultBook = result.ElementAt(1);
+
+            firstResultBook.Id.Should().Be(firstBook.Id);
+            firstResultBook.Categories.Count().Should().Be(1);
+            firstResultBook.Categories.First().Should().Be(category.Name);
+            firstResultBook.Author.Id.Should().Be(author.Id);
+            firstResultBook.Author.FirstName.Should().Be(author.FirstName);
+            firstResultBook.Author.LastName.Should().Be(author.LastName);
+
+            secondResultBook.Id.Should().Be(thirdBook.Id);
+            secondResultBook.Categories.Should().BeNullOrEmpty();
+            secondResultBook.Author.Id.Should().Be(author.Id);
+            secondResultBook.Author.FirstName.Should().Be(author.FirstName);
+            secondResultBook.Author.LastName.Should().Be(author.LastName);
         }
     }
 }
