@@ -43,14 +43,14 @@
             {
                 Id = 3,
                 Title = "Test Title 3",
-                Description = "title 1",
+                Description = "A description that contains title 1",
                 AuthorId = 1
             };
 
             var category = new Category
             {
                 Id = 1,
-                Name = "First category"
+                Name = "TestCategory"
             };
 
             var bookCategory = new BookCategory
@@ -62,8 +62,8 @@
             var author = new Author
             {
                 Id = 1,
-                FirstName = "User",
-                LastName = "Testov"
+                FirstName = "Test",
+                LastName = "User"
             };
 
             bookShopDbContext.Add(category);
