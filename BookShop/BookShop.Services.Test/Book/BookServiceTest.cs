@@ -81,7 +81,7 @@
             var bookService = new BookService(bookShopDbContext, mapper);
 
             // Act
-            var result = await bookService.Filter("1");
+            var result = await bookService.Filter("title 1");
 
             // Assert
             result

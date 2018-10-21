@@ -51,7 +51,7 @@
                 .Include(book => book.Author)
                 .Include(book => book.Categories)
                 .ThenInclude(bookCategory => bookCategory.Category)
-                .Where(book => book.Title.Contains(searchText) || book.Description.Contains(searchText))
+                .Where(book => book.Title.ToLower().Contains(searchText.ToLower()) || book.Description.ToLower().Contains(searchText.ToLower()))
                 .OrderBy(book => book.Title)
                 .ToAsyncEnumerable()
                 .Select(bookDataModel => this.mapper.Map<BookServiceModel>(bookDataModel))
