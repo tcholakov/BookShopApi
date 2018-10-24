@@ -53,9 +53,8 @@
                 .ThenInclude(bookCategory => bookCategory.Category)
                 .Where(book => book.Title.ToLower().Contains(searchText.ToLower()) || book.Description.ToLower().Contains(searchText.ToLower()))
                 .OrderBy(book => book.Title)
-                .ToAsyncEnumerable()
                 .Select(bookDataModel => this.mapper.Map<BookServiceModel>(bookDataModel))
-                .ToList();
+                .ToListAsync();
 
             return books;
         }
@@ -68,9 +67,8 @@
                 .Include(book => book.Categories)
                 .ThenInclude(bookCategory => bookCategory.Category)
                 .Where(book => book.Id == id)
-                .ToAsyncEnumerable()
                 .Select(bookDataModel => this.mapper.Map<BookServiceModel>(bookDataModel))
-                .FirstOrDefault();
+                .FirstOrDefaultAsync();
 
             return bookModel;
         }

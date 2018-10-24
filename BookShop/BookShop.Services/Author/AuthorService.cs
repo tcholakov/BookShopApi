@@ -55,9 +55,8 @@
                 .Include(book => book.Categories)
                 .ThenInclude(bookCategory => bookCategory.Category)
                 .Where(book => book.AuthorId == authorId)
-                .ToAsyncEnumerable()
                 .Select(bookDataModel => this.mapper.Map<BookServiceModel>(bookDataModel))
-                .ToList();
+                .ToListAsync();
 
             return booksTask;
         }
